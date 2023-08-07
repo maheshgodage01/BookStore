@@ -38,7 +38,7 @@ else{
     EmptyCart.style.display="block";
     NotLoggedIn.style.display="none";
 }
-
+window.Amount=0;
 if("currentUser" in sessionStorage){
     console.log("currentuser");
     let CurrentUser = sessionStorage.getItem("currentUser");
@@ -51,12 +51,12 @@ if("currentUser" in sessionStorage){
             console.log(myCart);
             let allUserItems = JSON.parse(sessionStorage.getItem("allUserItems"));
             // console.log(keys);
-            let Amount=0;
+            Amount=0;
             myCart.forEach(key=>{
                 Amount += addItem(key, allUserItems[key]);
                 
                 let TotalAmount = document.getElementById("final-amount");
-                let finalAmount = document.createTextNode("₹" + Amount+"/-");
+                let finalAmount = document.createTextNode("₹" + Amount.toFixed(2)+"/-");
                 TotalAmount.replaceChild(finalAmount, TotalAmount.childNodes[0]);
 
             });
@@ -164,6 +164,7 @@ function addItem(i, item){
 
     let priceCalculate = item.MRP - ((item.MRP/100)*item.Discount);
     let actualPrice = document.createTextNode("₹"+priceCalculate);
+
     price.appendChild(actualPrice);
     priceContainer.appendChild(price);
 
@@ -198,6 +199,7 @@ function addItem(i, item){
 
     let itemAmount = document.createElement("span");
     let Amount = document.createTextNode("₹"+priceCalculate);
+    // Amount.setAttribute('style', "\"font-weight: 600;\"");
     itemAmount.appendChild(Amount);
 
     listItemContainer.appendChild(Amount);
@@ -429,4 +431,15 @@ let logOutBtn = document.getElementById("logout");
 logOutBtn.addEventListener("click", ()=>{
     sessionStorage.removeItem("currentUser");
     location.reload();
+});
+
+
+
+
+
+let checkOut = document.getElementById("checkout-btn");
+checkOut.addEventListener("click", ()=>{
+    console.log(window.Amount.toFixed(2));
+    sessionStorage.setItem("TotalAmount", JSON.stringify(Amount));
+    location.assign("payment.html");
 });

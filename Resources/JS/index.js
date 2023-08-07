@@ -114,8 +114,6 @@ if("BookRecord" in localStorage){
 
 
 
-
-
 function showItem(i, item){
 
 
