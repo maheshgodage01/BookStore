@@ -71,6 +71,7 @@
 
 
 .categories {
+    visibility: hidden;
     padding-bottom: 5px;
     margin: 5px 10px;
     border-bottom: 1px solid rgb(224, 224, 224);

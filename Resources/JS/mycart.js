@@ -101,6 +101,7 @@ function addItem(i, item){
     if(item == undefined){
         return 0;
     }
+
     // let storeArray = JSON.parse(localStorage.getItem("BookRecord"));
     // let CurrentUser = sessionStorage.getItem("currentUser");
     // console.log("Current user :"+CurrentUser);
@@ -187,7 +188,6 @@ function addItem(i, item){
     OneItem.appendChild(priceContainer);
 
     itemList.appendChild(OneItem);
-
 
     let ItemListCheckout = document.getElementById("item-list");
     let listItemContainer = document.createElement("li");
@@ -423,3 +423,10 @@ function showItem(i, item){
 
     allItemList.appendChild(mainContainer);
 }
+
+let logOutBtn = document.getElementById("logout");
+
+logOutBtn.addEventListener("click", ()=>{
+    sessionStorage.removeItem("currentUser");
+    location.reload();
+});

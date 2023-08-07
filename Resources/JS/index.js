@@ -175,16 +175,26 @@ function showItem(i, item){
         if("Cart" in localStorage){
             let Cart = JSON.parse(localStorage.getItem("Cart"));
             // let myCart = 
-            let myCart = Cart[CurrentUser];
-            if(myCart.includes(i)){
-                console.log("already in Cart");
-                let carttext = document.createTextNode("Added to Cart");
-                cartContainer.appendChild(carttext);
+            
+            if(CurrentUser in Cart){
+                let myCart = Cart[CurrentUser];
+                console.log(myCart);
+                if(myCart.includes(i)){
+                    console.log("already in Cart");
+                    let carttext = document.createTextNode("Added to Cart");
+                    cartContainer.appendChild(carttext);
+                }
+                else{
+                    let carttext = document.createTextNode("Add to Cart");
+                    cartContainer.appendChild(carttext);
+                }
             }
             else{
                 let carttext = document.createTextNode("Add to Cart");
                 cartContainer.appendChild(carttext);
             }
+            // console.log(myCart);
+            
            
         }
         else{
@@ -210,11 +220,16 @@ function showItem(i, item){
         let CurrentUser = sessionStorage.getItem("currentUser");
         if("Wishlist" in localStorage){
             let Wishlist = JSON.parse(localStorage.getItem("Wishlist"));
-            // let myCart = 
-            let myWishlist = Wishlist[CurrentUser];
-            if(myWishlist.includes(i)){
-                console.log("already in Wishlist");
-                wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-filled.png");
+            
+            if(CurrentUser in Wishlist){
+                let myWishlist = Wishlist[CurrentUser];
+                if(myWishlist.includes(i)){
+                    console.log("already in Wishlist");
+                    wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-filled.png");
+                }
+                else{
+                    wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+                }
             }
             else{
                 wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
@@ -238,7 +253,6 @@ function showItem(i, item){
 
     allItemList.appendChild(mainContainer);
 }
-
 
 
 let logOutBtn = document.getElementById("logout");
@@ -266,6 +280,8 @@ function cartPage() {
 }
 
 function addToCart(id) {
+    let addToCartBtn = document.getElementById(id);
+    // addToCartBtn.innerHTML="Nothing";
     let key = id.slice(0,-1);
     console.log(id);
     console.log(typeof(key));
@@ -275,16 +291,30 @@ function addToCart(id) {
         if("Cart" in localStorage){
             let Cart = JSON.parse(localStorage.getItem("Cart"));
             // let myCart = 
-            let myCart = Cart[CurrentUser];
-            if(myCart.includes(key)){
-                alert("already in cart");
+            
+            if(CurrentUser in Cart){
+                let myCart = Cart[CurrentUser];
+                if(myCart.includes(key)){
+                    alert("already in cart");
+                }
+                else{
+                    myCart.push(key);
+                    Cart[CurrentUser] = myCart;
+                    localStorage.setItem("Cart",JSON.stringify(Cart));
+                    addToCartBtn.innerHTML = "ADDED TO CART";
+                    console.log("added to cart");
+                }
             }
             else{
+                let myCart = [];
                 myCart.push(key);
-            Cart[CurrentUser] = myCart;
-            localStorage.setItem("Cart",JSON.stringify(Cart));
+                Cart[CurrentUser] = myCart;
+                localStorage.setItem("Cart",JSON.stringify(Cart));
+                addToCartBtn.innerHTML = "ADDED TO CART";
                 console.log("added to cart");
             }
+
+            
             // myCart.push(key);
             // Cart[CurrentUser] = myCart;
             // localStorage.setItem("Cart",JSON.stringify(Cart));
@@ -299,6 +329,7 @@ function addToCart(id) {
                 Cart[CurrentUser] = myCart;
 
                 localStorage.setItem("Cart",JSON.stringify(Cart));
+                addToCartBtn.innerHTML = "ADDED TO CART";
                 console.log("Added to Cart");
             }
             
@@ -307,9 +338,8 @@ function addToCart(id) {
     }else{
         alert("Please LOGIN!");
     }
-    location.reload();
+    // location.reload();
 }
-
 
 function addToWishlist(id){
     let key = id.slice(0, -1);
@@ -328,24 +358,36 @@ function addToWishlist(id){
         if("Wishlist" in localStorage){
             let Wishlist = JSON.parse(localStorage.getItem("Wishlist"));
             // let myCart = 
-            let myWishlist = Wishlist[CurrentUser];
-            if(myWishlist.includes(key)){
-                console.log(myWishlist);
-                let index = myWishlist.indexOf(key);
-                myWishlist.splice(index, 1);
-                Wishlist[CurrentUser] = myWishlist;
-                console.log(myWishlist);
-                localStorage.setItem("Wishlist",JSON.stringify(Wishlist));
-                console.log("removed from wishlist");
-                imgNode.setAttribute('src', "./Resources/Images/heart-icon-pink.png")
+            
+            if(CurrentUser in Wishlist){
+                let myWishlist = Wishlist[CurrentUser];
+                if(myWishlist.includes(key)){
+                    console.log(myWishlist);
+                    let index = myWishlist.indexOf(key);
+                    myWishlist.splice(index, 1);
+                    Wishlist[CurrentUser] = myWishlist;
+                    console.log(myWishlist);
+                    localStorage.setItem("Wishlist",JSON.stringify(Wishlist));
+                    console.log("removed from wishlist");
+                    imgNode.setAttribute('src', "./Resources/Images/heart-icon-pink.png")
+                }
+                else{
+                    myWishlist.push(key);
+                    Wishlist[CurrentUser] = myWishlist;
+                    localStorage.setItem("Wishlist",JSON.stringify(Wishlist));
+                    console.log("added to wishlist");
+                    imgNode.setAttribute('src', "./Resources/Images/heart-icon-filled.png")
+                }
             }
             else{
+                let myWishlist = [];
                 myWishlist.push(key);
                 Wishlist[CurrentUser] = myWishlist;
                 localStorage.setItem("Wishlist",JSON.stringify(Wishlist));
                 console.log("added to wishlist");
                 imgNode.setAttribute('src', "./Resources/Images/heart-icon-filled.png")
             }
+            
             // myCart.push(key);
             // Cart[CurrentUser] = myCart;
             // localStorage.setItem("Cart",JSON.stringify(Cart));
@@ -466,6 +508,8 @@ function clickedItem(i){
 
     let buyBtn = document.createElement("div");
     let addToCart = document.createElement("button");
+    addToCart.setAttribute('id', key+"d")
+    addToCart.setAttribute('onclick', "addToCart(this.id)")
     addToCart.classList.add("add-to-cart-btn");
 
     if("currentUser" in sessionStorage){
@@ -474,10 +518,16 @@ function clickedItem(i){
             let Cart = JSON.parse(localStorage.getItem("Cart"));
             // let myCart = 
             let myCart = Cart[CurrentUser];
-            if(myCart.includes(key)){
-                console.log("already in Cart");
-                let btnName = document.createTextNode("ADDED TO CART");
-                addToCart.appendChild(btnName);
+            if(!(myCart==undefined)){
+                if(myCart.includes(key)){
+                    console.log("already in Cart");
+                    let btnName = document.createTextNode("ADDED TO CART");
+                    addToCart.appendChild(btnName);
+                }
+                else{
+                    let btnName = document.createTextNode("ADD TO CART");
+                    addToCart.appendChild(btnName);
+                }
             }
             else{
                 let btnName = document.createTextNode("ADD TO CART");
@@ -509,11 +559,16 @@ function clickedItem(i){
             let Wishlist = JSON.parse(localStorage.getItem("Wishlist"));
             // let myCart = 
             let myWishlist = Wishlist[CurrentUser];
-            if(myWishlist.includes(key)){
-                console.log("already in Wishlist");
-                wishlistBtn.setAttribute('src',"./Resources/Images/heart-icon-filled.png");            }
+            if(!(myWishlist==undefined)){
+                if(myWishlist.includes(key)){
+                    console.log("already in Wishlist");
+                    wishlistBtn.setAttribute('src',"./Resources/Images/heart-icon-filled.png");            }
+                else{
+                    wishlistBtn.setAttribute('src',"./Resources/Images/heart-icon-pink.png");            }
+            }
             else{
                 wishlistBtn.setAttribute('src',"./Resources/Images/heart-icon-pink.png");            }
+            
            
         }
         else{
