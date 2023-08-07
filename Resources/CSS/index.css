@@ -207,10 +207,14 @@
 }
 
 .suggested-add-to-wishlist > img {
+    /* src: url(../Images/heart-icon-pink.png); */
     width: 20px;
     padding-bottom: 5px;
 }
 
+.added-to-wishlist {
+    src: url(../Images/heart-icon-filled.png);
+}
 
 
 
