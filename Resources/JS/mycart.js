@@ -434,6 +434,34 @@ logOutBtn.addEventListener("click", ()=>{
 });
 
 
+let applyCouponBtn = document.getElementById("apply-coupon-btn");
+applyCouponBtn.addEventListener("click", ()=>{
+    let couponCode = document.getElementById("coupon-code").value;
+    // let Coupons = {
+    //     WELCOME: 50,
+    //     LUCKY:25,
+    //     HELLO:20,
+    // };
+    // localStorage.setItem("coupons", JSON.stringify(Coupons));
+    let allCoupons = JSON.parse(localStorage.getItem("coupons"));
+    console.log(allCoupons);
+
+    console.log("Entered");
+
+    if(couponCode in allCoupons){
+        let TotalAmount = document.getElementById("final-amount");
+        Amount = Amount - ((Amount/100)*allCoupons[couponCode]);
+        let finalAmount = document.createTextNode("₹" + Amount.toFixed(2)+"/-");
+        TotalAmount.replaceChild(finalAmount, TotalAmount.childNodes[0]);
+        delete allCoupons[couponCode];
+        localStorage.setItem("coupons", JSON.stringify(allCoupons));
+        console.log(allCoupons);
+    }
+    else{
+        location.reload();
+    }
+    
+});
 
 
 

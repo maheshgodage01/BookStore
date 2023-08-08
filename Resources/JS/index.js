@@ -104,10 +104,18 @@ if("BookRecord" in localStorage){
 
 
     let allKeys = Object.keys(allUserItems);
+    let storeArray = JSON.parse(localStorage.getItem("BookRecord"));
+    let CurrentUser = sessionStorage.getItem("currentUser");
+
+    console.log(CurrentUser);
 
     allKeys.forEach(key =>{
-        showItem(key, allUserItems[key]);
+        if(!(parseInt(key)==CurrentUser)){
+            showItem(key, allUserItems[key]);
+        }
+
     });
+    
 
 }
 
