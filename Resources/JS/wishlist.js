@@ -207,16 +207,23 @@ function showItem(i, item){
         if("Cart" in localStorage){
             let Cart = JSON.parse(localStorage.getItem("Cart"));
             // let myCart = 
-            let myCart = Cart[CurrentUser];
-            if(myCart.includes(i)){
-                console.log("already in Cart");
-                let carttext = document.createTextNode("Added to Cart");
-                cartContainer.appendChild(carttext);
+            if(CurrentUser in Cart){
+                let myCart = Cart[CurrentUser];
+                if(myCart.includes(i)){
+                    console.log("already in Cart");
+                    let carttext = document.createTextNode("Added to Cart");
+                    cartContainer.appendChild(carttext);
+                }
+                else{
+                    let carttext = document.createTextNode("Add to Cart");
+                    cartContainer.appendChild(carttext);
+                }
             }
             else{
                 let carttext = document.createTextNode("Add to Cart");
                 cartContainer.appendChild(carttext);
             }
+            
            
         }
         else{
@@ -243,14 +250,21 @@ function showItem(i, item){
         if("Wishlist" in localStorage){
             let Wishlist = JSON.parse(localStorage.getItem("Wishlist"));
             // let myCart = 
-            let myWishlist = Wishlist[CurrentUser];
-            if(myWishlist.includes(i)){
-                console.log("already in Wishlist");
-                wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-filled.png");
-            }
-            else{
+            if(CurrentUser in Wishlist){
+                let myWishlist = Wishlist[CurrentUser];
+                if(myWishlist.includes(i)){
+                    console.log("already in Wishlist");
+                    wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-filled.png");
+                }
+                else{
+                    wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+                }
+            }else{
                 wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+
             }
+
+            
            
         }
         else{

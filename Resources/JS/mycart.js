@@ -467,7 +467,259 @@ applyCouponBtn.addEventListener("click", ()=>{
 
 let checkOut = document.getElementById("checkout-btn");
 checkOut.addEventListener("click", ()=>{
+
+    if(Amount == 0){
+        alert("Cart is Empty!!");
+        return 0;
+    }
     console.log(window.Amount.toFixed(2));
     sessionStorage.setItem("TotalAmount", JSON.stringify(Amount));
     location.assign("payment.html");
 });
+
+
+
+//-----------------------------------------------------------
+
+
+if("currentUser" in sessionStorage){
+    let CurrentUser = sessionStorage.getItem("currentUser");
+    if("allOrders" in localStorage){
+        let allOrders = JSON.parse(localStorage.getItem("allOrders"));
+        // let myCart = 
+        if(CurrentUser in allOrders){
+            let myOrders = allOrders[CurrentUser];
+            // console.log(CurrentUser);
+            // console.log(myOrders);
+            let allUserItems = JSON.parse(sessionStorage.getItem("allUserItems"));
+
+            
+            myOrders.forEach(key => {
+                // console.log(key)
+
+                let orderId = key.slice(-6);
+                let i = key.slice(0,-7)
+                console.log(orderId);
+                console.log(i)
+                // console.log(allUserItems[key]);
+                showOrders(orderId,i, allUserItems[i]);
+            });
+        }
+        
+    }
+}
+
+function showOrders(orderId, key, item){
+    // let allUserItems = JSON.parse(sessionStorage.getItem("allUserItems"));
+
+    // // let orderId = key.slice(-6);
+    // // key = key.slice(0,-7);
+    // // console.log(orderId);
+    // console.log("key.."+key)
+    // // console.log(allUserItems[key]);
+
+    // console.log(item);
+
+    if((Object.keys(item)).length == 0){
+        return 0;
+    }
+    let allItemList = document.getElementById("all-items");
+
+    let mainContainer = document.createElement("div");
+    mainContainer.classList.add("suggested-item-list");
+    mainContainer.setAttribute('id', key);
+
+    let imgContainer = document.createElement("div");
+    imgContainer.classList.add("suggested-item-img");
+    let imgFile = document.createElement("img");
+    imgFile.setAttribute('src', item.ImageFile);
+    imgFile.setAttribute('id', key+"i")
+    imgFile.setAttribute('onclick', "clickedItem(this.id)")
+    imgContainer.appendChild(imgFile);
+    mainContainer.appendChild(imgContainer);
+
+    let priceContainer = document.createElement("div");
+    priceContainer.classList.add("suggested-item-prices");
+    let itemPrice = document.createElement("div");
+    itemPrice.classList.add("suggested-item-price");
+    let priceSpan = document.createElement("span");
+    priceSpan.setAttribute('id', key+"a");
+    let priceCalculate = item.MRP - ((item.MRP/100)*item.Discount);
+    let price= document.createTextNode("₹"+priceCalculate);
+    priceSpan.appendChild(price);
+    itemPrice.appendChild(priceSpan);
+    priceContainer.appendChild(itemPrice);
+
+    let itemMrpContainer = document.createElement("div");
+    itemMrpContainer.classList.add("suggested-item-mrp");
+    let mrpText = document.createTextNode("MRP");
+    itemMrpContainer.appendChild(mrpText);
+    let mrpSpan = document.createElement("span");
+    mrpSpan.classList.add("suggested-item-mrp-line-through");
+    mrpSpan.setAttribute('id', key+"b");
+    let mrpValue = document.createTextNode("₹"+item.MRP);
+    mrpSpan.appendChild(mrpValue);
+    itemMrpContainer.appendChild(mrpSpan);
+    priceContainer.appendChild(itemMrpContainer);
+
+    mainContainer.appendChild(priceContainer);
+
+    let deliverBtnContainer = document.createElement("div");
+    // buyBtnContainer.classList.add("suggested-buy-btn");
+    let deliverBtn = document.createElement("button");
+    deliverBtn.setAttribute('id', key+"-"+orderId);
+    let id = key+"-"+orderId;
+
+
+    // if(orderCheck(id)){
+    //     console.log("inside if");
+    //     deliverBtn.classList.add("order-completed");
+    //     let deliver = document.createTextNode("DELIVERED");
+    //     deliverBtn.appendChild(deliver);
+    // }
+    // else{
+    //     console.log("inside else");
+
+        
+    // }
+
+    deliverBtn.setAttribute('onClick', "cancelOrder(this.id)");
+        deliverBtn.classList.add("deliver-order");
+        let deliver = document.createTextNode("CANCEL");
+        deliverBtn.appendChild(deliver);
+
+    
+    deliverBtnContainer.appendChild(deliverBtn);
+    mainContainer.appendChild(deliverBtnContainer);
+    
+
+    // let buyBtnContainer = document.createElement("div");
+    // buyBtnContainer.classList.add("suggested-buy-btn");
+    // let cartContainer = document.createElement("button");
+    // cartContainer.classList.add("suggested-add-to-bag");
+    // cartContainer.setAttribute('id', i+"c");
+    // cartContainer.setAttribute("onclick", "addToCart(this.id)");
+
+    // if("currentUser" in sessionStorage){
+    //     let CurrentUser = sessionStorage.getItem("currentUser");
+    //     if("Cart" in localStorage){
+    //         let Cart = JSON.parse(localStorage.getItem("Cart"));
+    //         // let myCart = 
+    //         let myCart = Cart[CurrentUser];
+    //         if(myCart.includes(i)){
+    //             console.log("already in Cart");
+    //             let carttext = document.createTextNode("Added to Cart");
+    //             cartContainer.appendChild(carttext);
+    //         }
+    //         else{
+    //             let carttext = document.createTextNode("Add to Cart");
+    //             cartContainer.appendChild(carttext);
+    //         }
+           
+    //     }
+    //     else{
+    //         let carttext = document.createTextNode("Add to Cart");
+    //         cartContainer.appendChild(carttext);
+
+    //     }
+    // }
+    // else{
+    //     let carttext = document.createTextNode("Add to Cart");
+    //     cartContainer.appendChild(carttext);
+    // }
+    
+    // buyBtnContainer.appendChild(cartContainer);
+
+    // let wishlistContainer = document.createElement("button");
+    // wishlistContainer.classList.add("suggested-add-to-wishlist");
+    // wishlistContainer.setAttribute('id', i+"d");
+    // wishlistContainer.setAttribute('onclick', "removeFromWishlist(this.id)");
+    // let wishlistIcon = document.createElement("img");
+
+    // if("currentUser" in sessionStorage){
+    //     let CurrentUser = sessionStorage.getItem("currentUser");
+    //     if("Wishlist" in localStorage){
+    //         let Wishlist = JSON.parse(localStorage.getItem("Wishlist"));
+    //         // let myCart = 
+    //         let myWishlist = Wishlist[CurrentUser];
+    //         if(myWishlist.includes(i)){
+    //             console.log("already in Wishlist");
+    //             wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-filled.png");
+    //         }
+    //         else{
+    //             wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+    //         }
+           
+    //     }
+    //     else{
+    //         wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+
+    //     }
+    // }
+    // else{
+    //     wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+    // }
+    // // wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+    // // wishlistIcon.setAttribute("onclick", "addToWishlist(this.id)");
+    // wishlistContainer.appendChild(wishlistIcon);
+    // buyBtnContainer.appendChild(wishlistContainer);
+
+    // mainContainer.appendChild(buyBtnContainer);
+
+    allItemList.appendChild(mainContainer);
+}
+
+let completedOrders = JSON.parse(localStorage.getItem("completedOrders"));
+completedOrders.forEach(key=>{
+    let item = document.getElementById(key);
+    if(!(item == undefined)){
+        console.log(item);
+        console.log(key);
+        item.classList.remove("deliver-order");
+        item.classList.add("order-completed");
+        item.innerHTML="DELIVERED";
+        item.removeAttribute("onClick");
+    }
+    
+});
+
+
+function orderCheck(id){
+    let completedOrders = JSON.parse(localStorage.getItem("completedOrders"));
+    completedOrders.forEach(key=>{
+        if(key == id){
+            console.log("true", key)
+            return true;
+        }
+    });
+    
+    // return false;
+}
+
+function cancelOrder(id){
+    console.log("Order Cancel");
+    console.log(id);
+    let user = parseInt(id);
+
+    let CurrentUser = sessionStorage.getItem("currentUser");
+
+
+    let allOrders = JSON.parse(localStorage.getItem("allOrders"));
+    let myOrders = allOrders[CurrentUser];
+    let index = myOrders.indexOf(id);
+    myOrders.splice(index, 1);
+    allOrders[CurrentUser]=myOrders;
+    localStorage.setItem("allOrders", JSON.stringify(allOrders));
+
+    let allAdmins = JSON.parse(localStorage.getItem("allClients"));
+    let UserOrders = allAdmins[user];
+    index = UserOrders.indexOf(id);
+    UserOrders.splice(index, 1);
+    allAdmins[user]=UserOrders;
+    localStorage.setItem("allClients", JSON.stringify(allAdmins));
+
+    let item = document.getElementById(id);
+    item.style.backgroundColor="#ababab";
+    item.style.fontSize="15px";
+    item.innerHTML="ORDER CANCELED";
+}

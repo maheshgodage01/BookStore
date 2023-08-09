@@ -440,3 +440,193 @@ logOutBtn.addEventListener("click", ()=>{
     sessionStorage.removeItem("currentUser");
     location.replace("index.html");
 });
+
+
+
+
+
+//-------------------------------------------------------
+
+if("allClients" in localStorage){
+    let CurrentUser = sessionStorage.getItem("currentUser");
+    let allAdmins = JSON.parse(localStorage.getItem("allClients"));
+    if(CurrentUser in allAdmins){
+        let allOrders = allAdmins[CurrentUser];
+        // let myCart = 
+        let allUserItems = JSON.parse(sessionStorage.getItem("allUserItems"));
+
+        allOrders.forEach(key => {
+            console.log(key);
+            // console.log(key.slice(-10));
+            // let user = key.slice(-10);
+            // key=key.slice(0,-11);
+            // console.log(key);
+            // console.log(key);
+            let orderId = key.slice(-6);
+            let i = key.slice(0,-7)
+            // console.log(orderId);
+            // console.log(i)
+            // console.log(allUserItems[i]);
+            showOrders(orderId,i, allUserItems[i]);
+        });
+    }
+}
+
+function showOrders(orderId,i, item){
+
+    if((Object.keys(item)).length == 0){
+        return 0;
+    }
+    let allItemList = document.getElementById("all-items-order");
+
+    let mainContainer = document.createElement("div");
+    mainContainer.classList.add("suggested-item-list");
+    mainContainer.setAttribute('id', i);
+
+    let imgContainer = document.createElement("div");
+    imgContainer.classList.add("suggested-item-img");
+    let imgFile = document.createElement("img");
+    imgFile.setAttribute('src', item.ImageFile);
+    imgFile.setAttribute('id', i+"i")
+    imgFile.setAttribute('onclick', "clickedItem(this.id)")
+    imgContainer.appendChild(imgFile);
+    mainContainer.appendChild(imgContainer);
+
+    let priceContainer = document.createElement("div");
+    priceContainer.classList.add("suggested-item-prices");
+    let itemPrice = document.createElement("div");
+    itemPrice.classList.add("suggested-item-price");
+    let priceSpan = document.createElement("span");
+    priceSpan.setAttribute('id', i+"a");
+    let priceCalculate = item.MRP - ((item.MRP/100)*item.Discount);
+    let price= document.createTextNode("₹"+priceCalculate);
+    priceSpan.appendChild(price);
+    itemPrice.appendChild(priceSpan);
+    priceContainer.appendChild(itemPrice);
+
+    let itemMrpContainer = document.createElement("div");
+    itemMrpContainer.classList.add("suggested-item-mrp");
+    let mrpText = document.createTextNode("MRP");
+    itemMrpContainer.appendChild(mrpText);
+    let mrpSpan = document.createElement("span");
+    mrpSpan.classList.add("suggested-item-mrp-line-through");
+    mrpSpan.setAttribute('id', i+"b");
+    let mrpValue = document.createTextNode("₹"+item.MRP);
+    mrpSpan.appendChild(mrpValue);
+    itemMrpContainer.appendChild(mrpSpan);
+    priceContainer.appendChild(itemMrpContainer);
+
+    mainContainer.appendChild(priceContainer);
+
+    let deliverBtnContainer = document.createElement("div");
+    // buyBtnContainer.classList.add("suggested-buy-btn");
+    let deliverBtn = document.createElement("button");
+    deliverBtn.setAttribute('id', i+"-"+orderId);
+    deliverBtn.setAttribute('onClick', "onDeliver(this.id)");
+    deliverBtn.classList.add("deliver-order");
+    let deliver = document.createTextNode("DELIVER");
+    deliverBtn.appendChild(deliver);
+    deliverBtnContainer.appendChild(deliverBtn);
+    mainContainer.appendChild(deliverBtnContainer);
+    // cartContainer.classList.add("suggested-add-to-bag");
+    // cartContainer.setAttribute('id', i+"c");
+    // cartContainer.setAttribute("onclick", "addToCart(this.id)");
+
+    // if("currentUser" in sessionStorage){
+    //     let CurrentUser = sessionStorage.getItem("currentUser");
+    //     if("Cart" in localStorage){
+    //         let Cart = JSON.parse(localStorage.getItem("Cart"));
+    //         // let myCart = 
+    //         let myCart = Cart[CurrentUser];
+    //         if(myCart.includes(i)){
+    //             console.log("already in Cart");
+    //             let carttext = document.createTextNode("Added to Cart");
+    //             cartContainer.appendChild(carttext);
+    //         }
+    //         else{
+    //             let carttext = document.createTextNode("Add to Cart");
+    //             cartContainer.appendChild(carttext);
+    //         }
+           
+    //     }
+    //     else{
+    //         let carttext = document.createTextNode("Add to Cart");
+    //         cartContainer.appendChild(carttext);
+
+    //     }
+    // }
+    // else{
+    //     let carttext = document.createTextNode("Add to Cart");
+    //     cartContainer.appendChild(carttext);
+    // }
+    
+    // buyBtnContainer.appendChild(cartContainer);
+
+    // let wishlistContainer = document.createElement("button");
+    // wishlistContainer.classList.add("suggested-add-to-wishlist");
+    // wishlistContainer.setAttribute('id', i+"d");
+    // wishlistContainer.setAttribute('onclick', "removeFromWishlist(this.id)");
+    // let wishlistIcon = document.createElement("img");
+
+    // if("currentUser" in sessionStorage){
+    //     let CurrentUser = sessionStorage.getItem("currentUser");
+    //     if("Wishlist" in localStorage){
+    //         let Wishlist = JSON.parse(localStorage.getItem("Wishlist"));
+    //         // let myCart = 
+    //         let myWishlist = Wishlist[CurrentUser];
+    //         if(myWishlist.includes(i)){
+    //             console.log("already in Wishlist");
+    //             wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-filled.png");
+    //         }
+    //         else{
+    //             wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+    //         }
+           
+    //     }
+    //     else{
+    //         wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+
+    //     }
+    // }
+    // else{
+    //     wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+    // }
+    // // wishlistIcon.setAttribute('src', "./Resources/Images/heart-icon-pink.png");
+    // // wishlistIcon.setAttribute("onclick", "addToWishlist(this.id)");
+    // wishlistContainer.appendChild(wishlistIcon);
+    // buyBtnContainer.appendChild(wishlistContainer);
+
+    // mainContainer.appendChild(buyBtnContainer);
+
+    allItemList.appendChild(mainContainer);
+}
+
+function onDeliver(key){
+    // console.log(key);
+    console.log("Ondeliver"+key)
+    let deliverBtn = document.getElementById(key);
+    deliverBtn.style.backgroundColor="#45ac73";
+    deliverBtn.innerHTML="DELIVERED";
+
+
+    if("completedOrders" in localStorage){
+        let completedOrders = JSON.parse(localStorage.getItem("completedOrders"));
+        completedOrders.push(key);
+        localStorage.setItem("completedOrders", JSON.stringify(completedOrders));
+    }
+    else{
+        let completedOrders = [];
+        completedOrders.push(key);
+        localStorage.setItem("completedOrders", JSON.stringify(completedOrders));
+    }
+
+    let CurrentUser = sessionStorage.getItem("currentUser");
+    let allAdmins = JSON.parse(localStorage.getItem("allClients"))
+    let allOrders = allAdmins[CurrentUser];
+    let index = allOrders.indexOf(key);
+    allOrders.splice(index, 1);
+    allAdmins[CurrentUser]=allOrders;
+
+    localStorage.setItem("allClients", JSON.stringify(allAdmins));
+}
+

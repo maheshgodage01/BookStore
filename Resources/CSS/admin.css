@@ -231,3 +231,36 @@ input::file-selector-button {
     border: 1px solid rgb(140, 140, 140);
 }
 
+
+
+#placed-order-text {
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin: 20px;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: capitalize;
+    font-style: italic;
+}
+
+.deliver-order {
+
+    margin: 10%;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    width: 80%;
+    border: none;
+    background-color: #ff2a6e;
+    color:white;
+    /* font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; */
+    font-weight: 600;
+    padding: 5px;
+
+}
+
+.deliver-order:hover{
+    /* background-color: #45ac73; */
+    border: 1px solid white;
+}
